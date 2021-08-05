@@ -1,0 +1,78 @@
+﻿@model List<CartItem>
+@{
+    ViewBag.Title = "Cart detail";
+}
+<h2>Cart Detail</h2>
+
+@if (Model.Count > 0)
+{
+    double totalAmount = 0;
+    int orderNumber = 1;
+
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Product Name</th>
+                <th>Photo</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartitem in Model)
+            {
+                var amount = cartitem.Quantity * cartitem.Product.Price - Math.Floor(cartitem.Quantity * cartitem.Product.Price * cartitem.Product.Discount);
+                totalAmount += amount;
+
+                <tr>
+                    <td>@(orderNumber++)</td>
+                    <td>@cartitem.Product.ProductName</td>
+                    <td> <img style="width:90px; height:90px;" src="@Url.Content(@cartitem.Product.Photo)" alt="@cartitem.Product.ProductName" /></td>
+                    <td class="text-right">@(cartitem.Product.Price.ToString("n0"))</td>
+                    <td class="text-right"><input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Product.ProductId}")" /> </td>
+                    <td class="text-right">@(amount.ToString("n0")) </td>
+                    <td>
+                        <button class="btn btn-success updatecartitem"
+                                data-productId="@cartitem.Product.ProductId">
+                            Update
+                        </button>
+                        <a asp-controller="Home" asp-action="RemoveCart" asp-route-productId="@cartitem.Product.ProductId" class="btn btn-danger">Remove</a>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="5" class="text-right">Total amount</td>
+                <td class="text-right">@(totalAmount.ToString("n0"))</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    @section scripts {
+        <script>
+          $(document).ready(function () {
+              $(".updatecartitem").click(function (event) {
+                  event.preventDefault();
+                  var productId = $(this).attr("data-productId");
+                  var quantity = $("#quantity-" + productId).val();
+                  $.ajax({
+                      type: "POST",
+                      url:"@Url.RouteUrl("updatecart")",
+                      data: {
+                          productId: productId,
+                          quantity:quantity
+                      },
+                      success: function (result) {
+                          window.location.href = "@Url.RouteUrl(@"\Home\Cart")";
+                      }
+                  });
+              });
+          });
+        </script>
+    }
+}
+else
+            {
+                <p class="alert alert-danger" > Cart is empty</p>
+            }

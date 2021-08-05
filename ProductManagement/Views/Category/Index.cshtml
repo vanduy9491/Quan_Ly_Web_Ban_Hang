@@ -1,0 +1,131 @@
+﻿@model CategoryView
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Category";
+    var count = 1;
+    var pageNumber = 1;
+    
+}
+<div class="main-grid">
+    <div class="row">
+        <div class="w-100 mb-2">
+            <form asp-controller="Category" asp-action="Index"  method="post">
+                <input type="text" name="keyword" placeholder="Search">
+                <button class="btn btn-small" style="background-color: gray" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+            <div class="float-right">
+                <a class="btn btn-success" asp-controller="Category" asp-action="Create">
+                    <i class="fas fa-plus">
+                    </i>
+                    Create
+                </a>
+            </div>
+        </div>
+
+        <table class="agile-tables w3l-table-info" id="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th style="width: 5%">
+                        #
+                    </th>
+                    <th style="width: 35%">
+                        Category Name
+                    </th>
+                    <th style="width: 10%" class="text-center">
+                        Product quantity
+                    </th>
+                    <th style="width: 10%" class="text-center">
+                        Total quantity
+                    </th>
+                    <th style="width: 10%" class="text-center">
+                        Status
+                    </th>
+                    <th style="width: 30%">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Category cat in Model.Categories)
+                {
+                    <tr>
+                        <td>@cat.CategoryId.</td>
+                        <td>@cat.CategoryName</td>
+                        <td class="text-center">
+                            <a asp-controller="Product" asp-action="Index" asp-route-catId="@cat.CategoryId" >@cat.Products.Count</a>
+                        </td>
+                        <td class="text-center">
+                            @cat.Products.Sum(b => b.Quantity)
+                        </td>
+                        <td class="project-state text-center">
+                            @if (cat.IsDeleted)
+                            {
+                                <span class="badge badge-danger">Removed</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-success">Active</span>
+                            }
+                        </td>
+                        <td class="project-actions text-right">
+                            @if (cat.IsDeleted)
+                            {
+                                <a class="btn btn-success btn-sm" asp-controller="Category" asp-action="Restore" asp-route-categoryId="@cat.CategoryId">
+                                    <i class="fas fa-folder">
+                                    </i>
+                                    Restore
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success btn-sm" asp-controller="Product" asp-action="Index" asp-route-catId="@cat.CategoryId">
+                                    <i class="fas fa-folder-open"></i>
+                                    View
+                                </a>
+                                <a class="btn btn-info btn-sm" href="#">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                    Edit
+                                </a>
+                                <a class="btn btn-danger btn-sm" asp-controller="Category" asp-action="Remove" asp-route-categoryId="@cat.CategoryId" onclick="return confirm('Are you sure you want deleted')">
+                                    <i class="fas fa-trash">
+                                    </i>
+                                    Remove
+                                </a>
+                            }
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <div>
+            <ul class="pagination">
+                <li class="@(Model.Pagination.CurrentPage == 1 ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Category" asp-action="index" asp-route-pageNumber="1">First</a></li>
+                <li class="@(Model.Pagination.CurrentPage == 1 ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Category" asp-action="index" asp-route-pageNumber="@(Model.Pagination.CurrentPage-1)">Previous</a></li>
+                @for (pageNumber = Model.Pagination.StartPage; pageNumber <= Model.Pagination.EndPage; pageNumber++)
+                {
+                    <li class="@(pageNumber == Model.Pagination.CurrentPage ? "page-item active" : "page-item")"><a class="page-link" asp-controller="Category" asp-action="index" asp-route-pageNumber="@pageNumber">@pageNumber</a></li>
+                }
+                <li class="@(Model.Pagination.CurrentPage == Model.Pagination.TotalPage ? "page-item disabled" : "page-item")"><a class="page-link" asp-action="index" asp-route-pageNumber="@(Model.Pagination.CurrentPage+1)">Next</a></li>
+                <li class="@(Model.Pagination.CurrentPage == Model.Pagination.TotalPage ? "page-item disabled" : "page-item")"><a class="page-link" asp-action="index" asp-route-pageNumber="@Model.Pagination.TotalPage">Last</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function changePageSize() {
+            window.location.href = `/Category/Index/?pageNumber=1&pageSize=${$('#pageSize').val()}`;
+        }
+        function search(el) {
+            if ($(el).val() == null || $(el).val() == '') {
+                window.location.href = `/Category/Index/?pageNumber=1&pageSize=${$('#pageSize').val()}`;
+            }
+            else {
+                window.location.href = `/Category/Index/?pageNumber=1&pageSize=${$('#pageSize').val()}&keyword=${$(el).val()}`;
+            }
+        }
+    </script>
+}

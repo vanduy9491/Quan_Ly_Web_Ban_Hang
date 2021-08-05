@@ -1,0 +1,76 @@
+﻿@model ProductManagement.Models.Product.CreateProduct
+
+@{
+    ViewBag.Title = $"{ViewBag.CategoryName} | Create";
+}
+
+
+
+<div class="main-grid">
+    <form asp-controller="Product" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-6">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="ProductName" class="control-label"></label>
+                    <input asp-for="ProductName" class="form-control" />
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Infomation" class="control-label"></label>
+                    <input asp-for="Infomation" class="form-control" />
+                    <span asp-validation-for="Infomation" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PublishYear" class="control-label"></label>
+                    <input asp-for="PublishYear" class="form-control" />
+                    <span asp-validation-for="PublishYear" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Quantity" class="control-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Discount" class="control-label"></label>
+                    <input asp-for="Discount" class="form-control" />
+                    <span asp-validation-for="Discount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <img class="img-thumbnail no-photo" src="~/Images/No-Image.png" alt="no photo" />
+                    <div class="input-group-append">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" accept="image/*" id="exampleInputFile" name="Photo">
+                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <a asp-controller="Product" asp-action="Index" asp-route-catId="@ViewBag.CategoryId">Back to List</a>
+        </div>
+    </form>
+</div>
+@section scripts{
+    <script asp-append-version="true">
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $('.no-photo').attr('src', window.URL.createObjectURL($(this)[0].files[0]));
+            $(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+}
+
+

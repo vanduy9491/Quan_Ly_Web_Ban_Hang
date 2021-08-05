@@ -1,0 +1,143 @@
+﻿@model ListProduct
+@using System.Globalization
+@{
+    ViewBag.Title = Model.Category.CategoryName;
+    string FormatCurrency(double number)
+    {
+        CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
+        return number.ToString("#,###", cul.NumberFormat);
+    }
+    var pageIndex = 1;
+}
+<div class="main-grid">
+    <h1>@Model.Category.CategoryName</h1>
+    <div class="row">
+        <div class="w-100 mb-3">
+            <form asp-controller="Product" asp-action="Index" asp-route-catId="@Model.Category.CategoryId" method="post">
+                <input type="text" name="keyword" placeholder="Search">
+                <button class="btn btn-small" style="background-color: gray" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+            <div class="float-right text-right">
+                <a class="btn btn-success" asp-controller="Product" asp-action="Create">
+                    <i class="fas fa-plus">
+                    </i>
+                    Create
+                </a>
+                <a class="btn btn-dark" asp-controller="Category" asp-action="Index">
+                    <i class="fas fa-backward">
+                    </i>
+                    Back
+                </a>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-hover table-striped table-responsive-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th style="width: 5%">
+                        #
+                    </th>
+                    <th style="width: 25%">
+                        Product Name
+                    </th>
+                    <th style="width: 25%" class="text-center">
+                        Infomation
+                    </th>
+                    <th style="width: 10%" class="text-center">
+                        Photo
+                    </th>
+                    <th style="width: 5%" class="text-center">
+                        Price (vnd)
+                    </th>
+                    <th style="width: 5%" class="text-center">
+                        Quantity
+                    </th>
+                    <th style="width: 5%" class="text-center">
+                        Status
+                    </th>
+                    <th style="width: 20%">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Products prod in Model.Category.Products)
+                {
+                <tr>
+                    <td>@prod.ProductId.</td>
+                    <td>@prod.ProductName</td>
+                    <td>@prod.Infomation</td>
+                    <td class="text-center">
+                        <img class="img-fluid img-thumbnail img-lg" src=@Url.Content(prod.Photo) alt="@prod.ProductName" />
+                    </td>
+                    <td class="">
+                        @FormatCurrency((double)prod.Price)
+                    </td>
+                    <td class="text-center">
+                        @prod.Quantity
+                    </td>
+                    <td class="project-state text-center">
+                        @if (prod.IsDeleted)
+                            {
+                        <span class="badge-danger">Removed</span>
+                            }
+                            else
+                            {
+                        <span class="badge-danger ">Active</span>
+                            }
+                    </td>
+                    <td class="project-actions ">
+                        @if (!prod.IsDeleted)
+                            {
+                        <a class="btn btn-success btn-sm" asp-controller="Product" asp-action="View" asp-route-productId="@prod.ProductId">
+                            <i class="fas fa-folder">
+                            </i>
+                            View
+                        </a>
+                        <a class="btn btn-info btn-sm" asp-controller="Product" asp-action="Modify" asp-route-productId="@prod.ProductId">
+                            <i class="fas fa-pencil-alt">
+                            </i>
+                            Edit
+                        </a>
+                        <a class="btn btn-danger btn-sm" style="background-color:red" asp-controller="Product" asp-action="Remove" asp-route-productId="@prod.ProductId" onclick="return confirm('Are you sure you want to Remove?');">
+                            <i class="fas fa-trash">
+                            </i>
+                            Remove
+                        </a>
+                            }
+                            else
+                            {
+                        <a class="btn-warning btn-sm" asp-controller="Product" asp-action="Restore" asp-route-productId="@prod.ProductId">
+                            <i class="fas fa-trash-restore">
+                            </i>
+                            Restore
+                        </a>
+                            }
+
+
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <ul class="pagination">
+            <li class="@(Model.Pagination.CurrentPage == 1 ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="1">First</a></li>
+            <li class="@(Model.Pagination.CurrentPage == 1 ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="@(Model.Pagination.CurrentPage-1)">Previous</a></li>
+            @for (pageIndex = Model.Pagination.StartPage; pageIndex <= Model.Pagination.EndPage; pageIndex++)
+        {
+            <li class="@(pageIndex == Model.Pagination.CurrentPage ? "page-item active" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="@pageIndex">@pageIndex</a></li>
+        }
+            <li class="@(Model.Pagination.CurrentPage == Model.Pagination.TotalPage ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="@(Model.Pagination.CurrentPage+1)">Next</a></li>
+            <li class="@(Model.Pagination.CurrentPage == Model.Pagination.TotalPage ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="@Model.Pagination.TotalPage">Last</a></li>
+        </ul>
+    </div>
+</div>
+@section scripts{
+    <script asp-append-version="true">
+        function changePageSize() {
+            window.location.href = `/Product/Index/${$('#catId').val()}/1/${$('#pageSize').val()}`;
+        }
+    </script>
+}
