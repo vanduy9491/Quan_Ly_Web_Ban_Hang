@@ -62,60 +62,60 @@
             <tbody>
                 @foreach (Products prod in Model.Category.Products)
                 {
-                <tr>
-                    <td>@prod.ProductId.</td>
-                    <td>@prod.ProductName</td>
-                    <td>@prod.Infomation</td>
-                    <td class="text-center">
-                        <img class="img-fluid img-thumbnail img-lg" src=@Url.Content(prod.Photo) alt="@prod.ProductName" />
-                    </td>
-                    <td class="">
-                        @FormatCurrency((double)prod.Price)
-                    </td>
-                    <td class="text-center">
-                        @prod.Quantity
-                    </td>
-                    <td class="project-state text-center">
-                        @if (prod.IsDeleted)
+                    <tr>
+                        <td>@prod.ProductId.</td>
+                        <td>@prod.ProductName</td>
+                        <td>@prod.Infomation</td>
+                        <td class="text-center">
+                            <img class="img-fluid img-thumbnail img-lg" src=@Url.Content(prod.Photo) alt="@prod.ProductName" />
+                        </td>
+                        <td class="">
+                            @FormatCurrency((double)prod.Price)
+                        </td>
+                        <td class="text-center">
+                            @prod.Quantity
+                        </td>
+                        <td class="project-state text-center">
+                            @if (prod.IsDeleted)
                             {
-                        <span class="badge-danger">Removed</span>
+                                <span class="badge-danger">Removed</span>
                             }
                             else
                             {
-                        <span class="badge-danger ">Active</span>
+                                <span class="badge-danger ">Active</span>
                             }
-                    </td>
-                    <td class="project-actions ">
-                        @if (!prod.IsDeleted)
+                        </td>
+                        <td class="project-actions ">
+                            @if (!prod.IsDeleted)
                             {
-                        <a class="btn btn-success btn-sm" asp-controller="Product" asp-action="View" asp-route-productId="@prod.ProductId">
-                            <i class="fas fa-folder">
-                            </i>
-                            View
-                        </a>
-                        <a class="btn btn-info btn-sm" asp-controller="Product" asp-action="Modify" asp-route-productId="@prod.ProductId">
-                            <i class="fas fa-pencil-alt">
-                            </i>
-                            Edit
-                        </a>
-                        <a class="btn btn-danger btn-sm" style="background-color:red" asp-controller="Product" asp-action="Remove" asp-route-productId="@prod.ProductId" onclick="return confirm('Are you sure you want to Remove?');">
-                            <i class="fas fa-trash">
-                            </i>
-                            Remove
-                        </a>
+                                <a class="btn btn-success btn-sm" asp-controller="Product" asp-action="View" asp-route-productId="@prod.ProductId">
+                                    <i class="fas fa-folder">
+                                    </i>
+                                    View
+                                </a>
+                                <a class="btn btn-info btn-sm" asp-controller="Product" asp-action="Modify" asp-route-productId="@prod.ProductId">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                    Edit
+                                </a>
+                                <a class="btn btn-danger btn-sm" style="background-color:red; color:white" asp-controller="Product" asp-action="Remove" asp-route-productId="@prod.ProductId" onclick="return confirm('Are you sure you want to Remove?');">
+                                    <i class="fas fa-trash">
+                                    </i>
+                                    Remove
+                                </a>
                             }
                             else
                             {
-                        <a class="btn-warning btn-sm" asp-controller="Product" asp-action="Restore" asp-route-productId="@prod.ProductId">
-                            <i class="fas fa-trash-restore">
-                            </i>
-                            Restore
-                        </a>
+                                <a class="btn-warning btn-sm" asp-controller="Product" asp-action="Restore" asp-route-productId="@prod.ProductId">
+                                    <i class="fas fa-trash-restore">
+                                    </i>
+                                    Restore
+                                </a>
                             }
 
 
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 }
 
             </tbody>
@@ -126,9 +126,9 @@
             <li class="@(Model.Pagination.CurrentPage == 1 ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="1">First</a></li>
             <li class="@(Model.Pagination.CurrentPage == 1 ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="@(Model.Pagination.CurrentPage-1)">Previous</a></li>
             @for (pageIndex = Model.Pagination.StartPage; pageIndex <= Model.Pagination.EndPage; pageIndex++)
-        {
-            <li class="@(pageIndex == Model.Pagination.CurrentPage ? "page-item active" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="@pageIndex">@pageIndex</a></li>
-        }
+            {
+                <li class="@(pageIndex == Model.Pagination.CurrentPage ? "page-item active" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="@pageIndex">@pageIndex</a></li>
+            }
             <li class="@(Model.Pagination.CurrentPage == Model.Pagination.TotalPage ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="@(Model.Pagination.CurrentPage+1)">Next</a></li>
             <li class="@(Model.Pagination.CurrentPage == Model.Pagination.TotalPage ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="Product" asp-action="Index" asp-route-pageNumber="@Model.Pagination.TotalPage">Last</a></li>
         </ul>

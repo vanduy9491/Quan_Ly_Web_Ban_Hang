@@ -28,14 +28,14 @@ namespace ProductManagement.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
         public async Task<List<Category>> GetCategories()
         {
-            return await context.Categories.Include(p => p.Products).Where(c => c.IsDeleted == false).ToListAsync();
+            return await context.Categories.Include(p => p.Products).ToListAsync();
+            //.Where(c => c.IsDeleted == false)
         }
 
         public async Task<Category> GetCategoryById(int categoryId)
@@ -77,6 +77,21 @@ namespace ProductManagement.Services
 
                 throw;
             }
+        }
+        public async Task<Category> Modify(Category category)
+        {
+            try
+            {
+                context.Attach(category);
+                context.Entry<Category>(category).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+                return category;
+            }
+            catch
+            {
+                throw;
+            }
+
         }
     }
 }

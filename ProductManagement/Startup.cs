@@ -62,9 +62,9 @@ namespace ProductManagement
             app.UseSession();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseExceptionHandler("/Errors/");
+            //app.UseExceptionHandler("/Errors/");
             app.UseAuthorization();
-            app.UseStatusCodePagesWithRedirects("/Errors/NotFound");
+            //app.UseStatusCodePagesWithRedirects("/Errors/NotFound");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

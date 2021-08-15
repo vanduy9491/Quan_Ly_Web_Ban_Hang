@@ -18,6 +18,7 @@
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Amount</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -34,11 +35,11 @@
                     <td class="text-right"><input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Product.ProductId}")" /> </td>
                     <td class="text-right">@(amount.ToString("n0")) </td>
                     <td>
-                        <button class="btn btn-success updatecartitem"
+                        <button class="btn btn-success btn-sm updatecartitem"
                                 data-productId="@cartitem.Product.ProductId">
                             Update
                         </button>
-                        <a asp-controller="Home" asp-action="RemoveCart" asp-route-productId="@cartitem.Product.ProductId" class="btn btn-danger">Remove</a>
+                        <a asp-controller="Home" asp-action="RemoveCart" asp-route-productId="@cartitem.Product.ProductId" class="btn btn-danger btn-sm">Remove</a>
                     </td>
                 </tr>
             }

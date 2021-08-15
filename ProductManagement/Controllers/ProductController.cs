@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ProductManagement.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "SystemAdmin")]
     public class ProductController : Controller
     {
         private static int categoryId;
@@ -30,7 +30,7 @@ namespace ProductManagement.Controllers
             this.productService = productService;
             this.webHostEnvironment = webHostEnvironment;
         }
-        //[Route("/Product/Index/{catId=1}/{pageNumber=1}/{pageSize=10}/{keyword=''}")]
+        [Route("/Product/Index/{catId=1}/{pageNumber=1}/{pageSize=10}/{keyword=''}")]
         public async Task<IActionResult> Index(int catId, int? pageNumber, int? pageSize, string keyword)
         {
             categoryId = catId;
@@ -38,9 +38,9 @@ namespace ProductManagement.Controllers
             categoryName = category.CategoryName;
             var pagination = new Pagination(category.Products.Count, pageNumber, pageSize, keyword);
             keyword = keyword == "''" ? string.Empty : keyword;
-            var books = string.IsNullOrEmpty(keyword) ? category.Products : category.Products.Where(b => b.ProductName.Contains(keyword)).ToList();
-            books = books.OrderByDescending(b => b.ProductId).ToList().Skip((pagination.CurrentPage - 1) * pagination.PageSize).Take(pagination.PageSize).ToList();
-            category.Products = books;
+            var products = string.IsNullOrEmpty(keyword) ? category.Products : category.Products.Where(b => b.ProductName.Contains(keyword)).ToList();
+            products = products.OrderByDescending(b => b.ProductId).ToList().Skip((pagination.CurrentPage - 1) * pagination.PageSize).Take(pagination.PageSize).ToList();
+            category.Products = products;
             var listproduct = new ListProduct()
             {
 

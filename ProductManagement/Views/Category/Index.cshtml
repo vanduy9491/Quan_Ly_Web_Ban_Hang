@@ -6,14 +6,14 @@
     var pageNumber = 1;
     
 }
-<div class="main-grid">
+<div class="main-grid ">
     <div class="row">
-        <div class="w-100 mb-2">
+        <div class=" mb-2 ">
             <form asp-controller="Category" asp-action="Index"  method="post">
                 <input type="text" name="keyword" placeholder="Search">
                 <button class="btn btn-small" style="background-color: gray" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
             </form>
-            <div class="float-right">
+            <div class="float-right mb-1">
                 <a class="btn btn-success" asp-controller="Category" asp-action="Create">
                     <i class="fas fa-plus">
                     </i>
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <table class="agile-tables w3l-table-info" id="table">
+        <table class="table table-bordered table-hover table-striped table-responsive-sm"  id="table">
             <thead class="thead-dark">
                 <tr>
                     <th style="width: 5%">
@@ -40,7 +40,8 @@
                     <th style="width: 10%" class="text-center">
                         Status
                     </th>
-                    <th style="width: 30%">
+                    <th style="width: 30%" class="text-center">
+                        Action
                     </th>
                 </tr>
             </thead>
@@ -59,37 +60,37 @@
                         <td class="project-state text-center">
                             @if (cat.IsDeleted)
                             {
-                                <span class="badge badge-danger">Removed</span>
+                                <span class="badge-danger">Removed</span>
                             }
                             else
                             {
-                                <span class="badge badge-success">Active</span>
+                                <span class="badge-danger ">Active</span>
                             }
                         </td>
-                        <td class="project-actions text-right">
-                            @if (cat.IsDeleted)
+                        <td class="project-actions " style="text-align:center">
+                            @if (!cat.IsDeleted)
                             {
-                                <a class="btn btn-success btn-sm" asp-controller="Category" asp-action="Restore" asp-route-categoryId="@cat.CategoryId">
-                                    <i class="fas fa-folder">
+                                <a class="btn btn-success btn-md " style="margin-left:10%" asp-controller="Product" asp-action="Index" asp-route-catId="@cat.CategoryId">
+                                    <i class="fas fa-folder-open"></i>
+                                    
+                                </a>
+                                <a class="btn btn-info" style="margin-left:10%" asp-controller="Category" asp-action="Modify" asp-route-categoryId="@cat.CategoryId">
+                                    <i class="fas fa-pencil-alt">
                                     </i>
-                                    Restore
+                                    
+                                </a>
+                                <a class="btn btn-danger " style="background-color: red; color: white; margin-left: 10%" asp-controller="Category" asp-action="Remove" asp-route-categoryId="@cat.CategoryId" onclick="return confirm('Are you sure you want deleted')">
+                                    <i class="fas fa-trash">
+                                    </i>
+                                    
                                 </a>
                             }
                             else
                             {
-                                <a class="btn btn-success btn-sm" asp-controller="Product" asp-action="Index" asp-route-catId="@cat.CategoryId">
-                                    <i class="fas fa-folder-open"></i>
-                                    View
-                                </a>
-                                <a class="btn btn-info btn-sm" href="#">
-                                    <i class="fas fa-pencil-alt">
+                                <a class="btn btn-warning " style="margin-left:10%" title="Restore" asp-controller="Category" asp-action="Restore" asp-route-categoryId="@cat.CategoryId">
+                                    <i class="fas fa-folder">
                                     </i>
-                                    Edit
-                                </a>
-                                <a class="btn btn-danger btn-sm" asp-controller="Category" asp-action="Remove" asp-route-categoryId="@cat.CategoryId" onclick="return confirm('Are you sure you want deleted')">
-                                    <i class="fas fa-trash">
-                                    </i>
-                                    Remove
+                                    
                                 </a>
                             }
 
