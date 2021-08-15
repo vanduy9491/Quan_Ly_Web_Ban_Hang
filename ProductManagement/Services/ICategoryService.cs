@@ -13,5 +13,6 @@ namespace ProductManagement.Services
         Task<Category> Create(Category createCategory);
         Task<Category> Remove(int catId);
         Task<Category> Restore(int catId);
+        Task<Category> Modify(Category category); 
     }
 }

@@ -1,4 +1,5 @@
-﻿using ProductManagement.Models.Account;
+﻿using ProductManagement.Entities;
+using ProductManagement.Models.Account;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace ProductManagement.Services
         Task<LoginResult> Login(Login LoginUser);
         void Signout();
         Task<RegisterResult> Register(Register register);
+        Task<List<AppIdentityUser>> GetUsers();
+
     }
 }

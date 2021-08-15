@@ -12,7 +12,7 @@
 }
 @foreach (Category cat in Model)
 {
-    if (cat.Products.Count != 0)
+    if (cat.Products.Count != 0 && cat.CategoryId == 2)
     {
         <div class="product-sec1 px-sm-4 px-3 py-sm-5  py-3 mb-4" style="background-color:azure">
             <h3 class="heading-tittle text-center font-italic">@cat.CategoryName</h3>
@@ -77,14 +77,12 @@
                                         }
                                     </div>
                                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" >Stop business</a></div>
+                                        <div class="text-center"><a class="btn btn-outline-dark mt-auto">Stop business</a></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     }
-
-
                 }
             </div>
         </div>

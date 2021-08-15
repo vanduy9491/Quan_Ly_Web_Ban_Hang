@@ -1,0 +1,81 @@
+﻿@model ListUser
+@{
+    int count = 1;
+    var pageNumber = 1;
+
+}
+
+<div class="main-grid">
+    <table class="table table-bordered table-hover table-striped table-responsive-sm" id="table">
+        <thead class="thead-dark">
+            <tr>
+                <th style="width: 5%">
+                    #
+                </th>
+                <th style="width: 15%">
+                    User Name
+                </th>
+                <th style="width: 40%" class="text-center">
+                    Email
+                </th>
+                <th style="width: 10%" class="text-center">
+                    Phone number
+                </th>
+                <th style="width: 30%" class="text-center">
+                    Avatar
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var user in Model.appIdentityUser)
+            {
+
+                <tr>
+                    <td>@ViewBag.Count</td>
+                    <td>@user.UserName</td>
+                    <td>
+                        @user.Email
+                    </td>
+                    <td>
+                        @user.PhoneNumber
+                    </td>
+                    <td class="text-center">
+                        <img class="img-fluid img-thumbnail img-lg" style="width:50px; height: 50px" src=@Url.Content(user.Avatar) alt="@user.Avatar" />
+                    </td>
+                </tr>
+                ViewBag.Count++;
+            }
+
+        </tbody>
+    </table>
+    <div>
+        <ul class="pagination">
+            <li class="@(Model.Pagination.CurrentPage == 1 ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="User" asp-action="index" asp-route-pageNumber="1">First</a></li>
+            <li class="@(Model.Pagination.CurrentPage == 1 ? "page-item disabled" : "page-item")"><a class="page-link" asp-controller="User" asp-action="index" asp-route-pageNumber="@(Model.Pagination.CurrentPage-1)">Previous</a></li>
+            @for (pageNumber = Model.Pagination.StartPage; pageNumber <= Model.Pagination.EndPage; pageNumber++)
+            {
+                <li class="@(pageNumber == Model.Pagination.CurrentPage ? "page-item active" : "page-item")"><a class="page-link" asp-controller="User" asp-action="index" asp-route-pageNumber="@pageNumber">@pageNumber</a></li>
+            }
+            <li class="@(Model.Pagination.CurrentPage == Model.Pagination.TotalPage ? "page-item disabled" : "page-item")"><a class="page-link" asp-action="index" asp-route-pageNumber="@(Model.Pagination.CurrentPage+1)">Next</a></li>
+            <li class="@(Model.Pagination.CurrentPage == Model.Pagination.TotalPage ? "page-item disabled" : "page-item")"><a class="page-link" asp-action="index" asp-route-pageNumber="@Model.Pagination.TotalPage">Last</a></li>
+        </ul>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function changePageSize() {
+            window.location.href = `/User/Index/?pageNumber=1&pageSize=${$('#pageSize').val()}`;
+        }
+        function search(el) {
+            if ($(el).val() == null || $(el).val() == '') {
+                window.location.href = `/User/Index/?pageNumber=1&pageSize=${$('#pageSize').val()}`;
+            }
+            else {
+                window.location.href = `/User/Index/?pageNumber=1&pageSize=${$('#pageSize').val()}&keyword=${$(el).val()}`;
+            }
+        }
+    </script>
+}

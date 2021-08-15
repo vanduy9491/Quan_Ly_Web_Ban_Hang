@@ -26,7 +26,7 @@ namespace ProductManagement.Models.Product
         public IFormFile Photo { get; set; }
         public string ExistPhoto { get; set; }
 
-        public int CategoryId { get; set; }
+        public int  CategoryId { get; set; }
         public double Discount { get; set; }
     }
 }

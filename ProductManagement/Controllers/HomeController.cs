@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ProductManagement.Models.Cart;
+using ProductManagement.Models.Product;
 using ProductManagement.Services;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ProductManagement.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ICategoryService categoryService;
@@ -59,7 +61,7 @@ namespace ProductManagement.Controllers
                 cart.Add(new CartItem() { Quantity = 1, Product = productItem });
             }
             SaveCartSession(cart);
-            return RedirectToAction("Cart");
+            return RedirectToAction("Index");
         }
         [Route("Home/Cart")]
         public IActionResult Cart()
@@ -109,6 +111,34 @@ namespace ProductManagement.Controllers
             var session = HttpContext.Session;
             string jsoncart = JsonConvert.SerializeObject(ls);
             session.SetString(CARTKEY, jsoncart);
+        }
+        [HttpGet("/Home/View/{productId}")]
+        public async Task<IActionResult> View(int productId)
+        {
+            var product = await productService.GetProductById(productId);
+            var viewproduct = new ViewProduct()
+            {
+                ProductId = product.ProductId,
+                ProductName = product.ProductName,
+                Infomation = product.Infomation,
+                Price = product.Price,
+                ExistPhoto = product.Photo,
+                Discount = product.Discount,
+                PublishYear = product.PublishYear,
+                Quantity = product.Quantity,
+                Category = product.Category
+            };
+            ViewBag.productId = productId;
+            return View(viewproduct);
+        }
+
+        public async Task<IActionResult> ViewLapTop()
+        {
+            return View(await categoryService.GetCategories());
+        }
+        public async Task<IActionResult> ViewMobiles()
+        {
+            return View(await categoryService.GetCategories());
         }
     }
 }
